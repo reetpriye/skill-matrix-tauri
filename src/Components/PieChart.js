@@ -1,17 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
+import { Container, Row } from 'react-bootstrap';
 
-function PieChart({ data, width, height }) {
+function PieChart({ data, showLegend }) {
   const canvasRef = useRef(null);
   const chartInstanceRef = useRef(null);
-
-  const customColors = [
-    '#FF5733', // Red
-    '#36A2EB', // Blue
-    '#4BC600', // Green
-    '#FFD700', // Yellow
-    // Add more colors as needed
-  ];
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -27,10 +20,18 @@ function PieChart({ data, width, height }) {
           labels: data.labels,
           datasets: [
             {
-              data: data.values,
-              backgroundColor: customColors
+              data: data.values
             },
           ],
+        },
+        options: {
+          responsive: true, // Make the chart responsive
+          maintainAspectRatio: false, // Maintain the aspect ratio
+          plugins: {
+            legend: {
+              display: showLegend || false, // Optionally show the legend
+            },
+          },
         },
       });
     }
@@ -41,19 +42,16 @@ function PieChart({ data, width, height }) {
         chartInstanceRef.current.destroy();
       }
     };
-  // eslint-disable-next-line
-  }, [data]);
-
-  // Set custom width and height for the div
-  const divStyle = {
-    width: width || '200px', // Default width if not provided
-    height: height || '200px', // Default height if not provided
-  };
+  }, [data, showLegend]);
 
   return (
-    <div style={divStyle}>
-      <canvas ref={canvasRef} width="100%" height="100%" />
-    </div>
+    <Container>
+      <Row>
+        <div className="chart-container">
+          <canvas ref={canvasRef} />
+        </div>
+      </Row>
+    </Container>
   );
 }
 
