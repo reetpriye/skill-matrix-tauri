@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+// App.js
+import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Card } from 'react-bootstrap';
-import './App.css';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
 import FileUpload from './Components/FileUpload';
 import ColumnSelection from './Components/ColumnSelection';
 import PieChart from './Components/PieChart';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
+import './App.css';
+
+library.add(faSun, faMoon);
 
 function App() {
   // State management
@@ -15,6 +23,19 @@ function App() {
   const [excelColumns, setExcelColumns] = useState([]);
   const [labels, setLabels] = useState([]);
   const [values, setValues] = useState([]);
+  const [darkTheme, setDarkTheme] = useState(false);
+
+  const toggleDarkTheme = () => {
+    setDarkTheme(!darkTheme);
+  };
+  
+  useEffect(() => {
+    if (darkTheme) {
+      document.documentElement.classList.add('dark-theme');
+    } else {
+      document.documentElement.classList.remove('dark-theme');
+    }
+  }, [darkTheme]);
 
   // File selection handler
   const handleFileSelect = (file) => {
@@ -84,23 +105,44 @@ function App() {
   };
 
   return (
-    <Container>
-      <FileUpload onFileSelect={handleFileSelect} />
-      {selectedFile && (
+    <div className={darkTheme ? 'dark-theme mt-2 main-container' : 'mt-2 main-container'}>
+      <Container>
         <Row>
-          <Col>
-            <Card className="chart-container">
-              <Card.Body>
-                <ColumnSelection columns={excelColumns} onColumnSelect={handleColumnSelect} />
-                {selectedColumn && labels.length > 0 && (
-                  <PieChart data={{ labels, values }} showLegend={true}/>
-                )}
-              </Card.Body>
-            </Card>
+          <Col md={4}>
+            {/* Left Column - File Upload and Column Selection */}
+            <FileUpload onFileSelect={handleFileSelect} />
+            {selectedFile && (
+              <Card className="chart-container rounded-0">
+                <Card.Body>
+                  <ColumnSelection columns={excelColumns} onColumnSelect={handleColumnSelect} />
+                </Card.Body>
+              </Card>
+            )}
+          </Col>
+          <Col md={8}>
+            {/* Right Column - Pie Chart */}
+            {selectedColumn && labels.length > 0 && (
+              <Card className="chart-container rounded-0">
+                <Card.Body>
+                  <PieChart data={{ labels, values }} showLegend={true} />
+                </Card.Body>
+              </Card>
+            )}
           </Col>
         </Row>
-      )}
-    </Container>
+      </Container>
+      
+      <div id="theme-toggle" onClick={toggleDarkTheme}>
+        <Button variant={darkTheme ? 'light' : 'dark'}>
+          <div className="d-flex justify-content-between align-items-center">
+            <p className='m-0'>Toggle theme</p>
+            <div className='px-2'>
+              <FontAwesomeIcon icon={darkTheme ? 'sun' : 'moon'} />
+            </div>
+          </div>
+        </Button>
+      </div>
+    </div>
   );
 }
 

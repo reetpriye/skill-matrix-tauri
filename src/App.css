@@ -1,9 +1,36 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.main-container {
+  min-height: calc(100vh - 15px);
 }
 
 .chart-container {
   margin-top: 20px;
+}
+
+/* Dark Theme */
+.dark-theme {
+  background-color: #0a0a0a !important;
+  color: rgb(255, 255, 255, 0.05);
+}
+
+/* Additional Dark Theme Styles (you can customize these) */
+.dark-theme .theme-toggle {
+  color: #fff;
+}
+
+.dark-theme .chart-container {
+  background-color: #333;
+  border: 1px solid #444;
+  color: #fff;
+}
+
+.dark-theme .theme-toggle label {
+  color: #fff;
+}
+
+/* Additional Dark Theme Styles Ends Here */
+#theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
 }
