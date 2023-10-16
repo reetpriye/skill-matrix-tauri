@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Navbar, Nav } from 'react-bootstrap';
 
 import FileUpload from './Components/FileUpload';
 import ColumnSelection from './Components/ColumnSelection';
 import PieChart from './Components/PieChart';
+import FilterDropdown from './Components/FilterDropdown';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -24,6 +25,11 @@ function App() {
   const [labels, setLabels] = useState([]);
   const [values, setValues] = useState([]);
   const [darkTheme, setDarkTheme] = useState(false);
+  const [filters, setFilters] = useState([]);
+
+  const handleFilterSelect = (filter) => {
+    setFilters((prevFilters) => [...prevFilters, filter]);
+  };
 
   const toggleDarkTheme = () => {
     setDarkTheme(!darkTheme);
@@ -105,9 +111,66 @@ function App() {
   };
 
   return (
-    <div className={darkTheme ? 'dark-theme mt-2 main-container' : 'mt-2 main-container'}>
-      <Container>
+    <>
+      <Container fluid className={darkTheme ? 'dark-theme mt-2 main-container' : 'mt-2 main-container'}>
+        {/* Header Part */}
         <Row>
+          <Navbar bg="dark" data-bs-theme="dark" className='justify-content-center'>
+            <div>
+              <Navbar.Brand href="#home">Skills Matrix for Digital Thread Associates</Navbar.Brand>
+            </div>
+          </Navbar>
+        </Row>
+
+        {/* Main Body 4*4 chart & options + 1 chart */}
+        <Row className='body-container'>
+          {/* 4*4 charts */}
+          <Col md={8}>
+            <Container>
+              <Row>
+                <Col md={6}>
+                  {selectedColumn && labels.length > 0 && (
+                    <Card className="chart-container rounded-0">
+                      <Card.Body>
+                        <PieChart data={{ labels, values }} showLegend={true} />
+                      </Card.Body>
+                    </Card>
+                  )}
+                </Col>
+                <Col md={6}>
+                  {selectedColumn && labels.length > 0 && (
+                    <Card className="chart-container rounded-0">
+                      <Card.Body>
+                        <PieChart data={{ labels, values }} showLegend={true} />
+                      </Card.Body>
+                    </Card>
+                  )}
+                </Col>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  {selectedColumn && labels.length > 0 && (
+                    <Card className="chart-container rounded-0">
+                      <Card.Body>
+                        <PieChart data={{ labels, values }} showLegend={true} />
+                      </Card.Body>
+                    </Card>
+                  )}
+                </Col>
+                <Col md={6}>
+                  {selectedColumn && labels.length > 0 && (
+                    <Card className="chart-container rounded-0">
+                      <Card.Body>
+                        <PieChart data={{ labels, values }} showLegend={true} />
+                      </Card.Body>
+                    </Card>
+                  )}
+                </Col>
+              </Row>
+            </Container> 
+          </Col>
+
+          {/* Options + 1 chart */}
           <Col md={4}>
             {/* Left Column - File Upload and Column Selection */}
             <FileUpload onFileSelect={handleFileSelect} />
@@ -118,8 +181,21 @@ function App() {
                 </Card.Body>
               </Card>
             )}
-          </Col>
-          <Col md={8}>
+
+            {/* Filter Selection Dropdown */}
+            {selectedColumn && labels.length > 0 && (
+              <Card className="chart-container rounded-0">
+                <Card.Body>
+                  <FilterDropdown
+                    columns={excelColumns}
+                    selectedColumn={selectedColumn}
+                    labels={labels} // Pass the 'labels' prop here
+                    filters={filters}
+                    onFilterSelect={handleFilterSelect}
+                  />
+                </Card.Body>
+              </Card>
+            )}
             {/* Right Column - Pie Chart */}
             {selectedColumn && labels.length > 0 && (
               <Card className="chart-container rounded-0">
@@ -130,19 +206,29 @@ function App() {
             )}
           </Col>
         </Row>
+
+        {/* Footer Part */}
+        <Row>
+            <Col>
+              <div className='bg-dark text-white d-flex justify-content-between align-items-center'>
+                <div className='px-2'>
+                  <h6>Made with love from TCS</h6>
+                </div>
+                <div onClick={toggleDarkTheme}>
+                  <Button variant={darkTheme ? 'light' : 'dark'}>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <p className='m-0'>Toggle theme</p>
+                      <div className='px-2'>
+                        <FontAwesomeIcon icon={darkTheme ? 'sun' : 'moon'} />
+                      </div>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            </Col>
+        </Row>
       </Container>
-      
-      <div id="theme-toggle" onClick={toggleDarkTheme}>
-        <Button variant={darkTheme ? 'light' : 'dark'}>
-          <div className="d-flex justify-content-between align-items-center">
-            <p className='m-0'>Toggle theme</p>
-            <div className='px-2'>
-              <FontAwesomeIcon icon={darkTheme ? 'sun' : 'moon'} />
-            </div>
-          </div>
-        </Button>
-      </div>
-    </div>
+    </>
   );
 }
 

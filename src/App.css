@@ -28,9 +28,19 @@
 }
 
 /* Additional Dark Theme Styles Ends Here */
-#theme-toggle {
+/* #theme-toggle {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 999;
+} */
+
+.test-div {
+  width: '200px' !important;
+  height: '200px' !important;
+  background-color: red !important;
+}
+
+.body-container {
+  min-height: calc(100vh - 300px);
 }

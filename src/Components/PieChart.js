@@ -49,7 +49,7 @@ function PieChart({ data, showLegend }) {
     <Container>
       <Row>
         <div className="chart-container">
-          <canvas ref={canvasRef} />
+          <canvas ref={canvasRef}/>
         </div>
       </Row>
     </Container>
