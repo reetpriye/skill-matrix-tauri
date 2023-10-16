@@ -31,7 +31,7 @@ function PieChart({ data, showLegend }) {
           plugins: {
             legend: {
               display: showLegend || false, // Optionally show the legend
-            },
+            }
           },
         },
       });

@@ -44,3 +44,8 @@
 .body-container {
   min-height: calc(100vh - 300px);
 }
+
+.select-dropdown {
+  height: 40px;
+  font-size: 14px;
+}

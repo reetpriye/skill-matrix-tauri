@@ -1,24 +1,32 @@
-// FilterDropdown.js
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-function FilterDropdown({ columns, selectedColumn, labels, filters, onFilterSelect }) {
-  const [distinctValues, setDistinctValues] = useState([]);
+function FilterDropdown({ columns, onFilterSelect, filters }) {
+  const [selectedColumn, setSelectedColumn] = useState('');
+  const [selectedOperator, setSelectedOperator] = useState('=');
   const [selectedValue, setSelectedValue] = useState('');
 
-  useEffect(() => {
-    // Calculate distinct values based on the selected column
-    const distinct = Array.from(new Set(labels));
-    setDistinctValues(distinct);
-  }, [selectedColumn, labels]);
+  const handleColumnChange = (e) => {
+    setSelectedColumn(e.target.value);
+  };
 
-  const handleFilterChange = (e) => {
+  const handleOperatorChange = (e) => {
+    setSelectedOperator(e.target.value);
+  };
+
+  const handleValueChange = (e) => {
     setSelectedValue(e.target.value);
   };
 
   const handleAddFilter = () => {
-    if (selectedValue) {
-      onFilterSelect({ column: selectedColumn, value: selectedValue });
+    if (selectedColumn && selectedOperator && selectedValue) {
+      onFilterSelect({
+        column: selectedColumn,
+        operator: selectedOperator,
+        value: selectedValue,
+      });
+      setSelectedColumn('');
+      setSelectedOperator('=');
       setSelectedValue('');
     }
   };
@@ -27,16 +35,29 @@ function FilterDropdown({ columns, selectedColumn, labels, filters, onFilterSele
     <Form.Group>
       <Form.Label>Select Filters:</Form.Label>
       <div className="d-flex">
-        <Form.Select onChange={handleFilterChange} value={selectedValue}>
-          <option value="">Choose a Value</option>
-          {distinctValues.map((value) => (
-            <option key={value} value={value}>
-              {value}
+        <Form.Select className="select-dropdown me-2" onChange={handleColumnChange} value={selectedColumn}>
+          <option value="">Choose a Column</option>
+          {columns.map((column) => (
+            <option key={column} value={column}>
+              {column}
             </option>
           ))}
         </Form.Select>
-        <Button variant="primary" onClick={handleAddFilter}>
-          Add Filter
+        <Form.Select className="select-dropdown me-2" onChange={handleOperatorChange} value={selectedOperator}>
+          <option value="="> = </option>
+          <option value=">"> &gt; </option>
+          <option value="<"> &lt; </option>
+          <option value=">="> &ge; </option>
+          <option value="<="> &le; </option>
+        </Form.Select>
+        <Form.Control
+          type="text"
+          placeholder="Enter Value"
+          value={selectedValue}
+          onChange={handleValueChange}
+        />
+        <Button variant="primary" onClick={handleAddFilter} className='btn-sm'>
+          Add
         </Button>
       </div>
       <div className="mt-2">
