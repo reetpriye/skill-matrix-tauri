@@ -21,7 +21,7 @@ function PieChart({ data, showLegend }) {
           labels: data.labels,
           datasets: [
             {
-              data: data.values
+              data: data.values,
             },
           ],
         },
@@ -31,7 +31,7 @@ function PieChart({ data, showLegend }) {
           plugins: {
             legend: {
               display: showLegend || false, // Optionally show the legend
-            }
+            },
           },
         },
       });
@@ -49,7 +49,7 @@ function PieChart({ data, showLegend }) {
     <Container>
       <Row>
         <div className="chart-container">
-          <canvas ref={canvasRef}/>
+          <canvas ref={canvasRef} />
         </div>
       </Row>
     </Container>

@@ -13,7 +13,12 @@ function FileUpload({ onFileSelect }) {
       <Card.Body>
         <Form.Group controlId="formFileSm">
           <Form.Label>Select Input File</Form.Label>
-          <Form.Control type="file" size="sm" accept=".xlsx" onChange={handleFileSelect} />
+          <Form.Control
+            type="file"
+            size="sm"
+            accept=".xlsx"
+            onChange={handleFileSelect}
+          />
         </Form.Group>
       </Card.Body>
     </Card>
