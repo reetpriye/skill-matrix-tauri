@@ -76,23 +76,18 @@ const FixedPieChart = memo(({ data, excelColumns, showLegend, column }) => {
 
   const onExcelDataChange = data => {
     setExcelData(data)
-    console.log(
-      '%cFixedPieChart.js line:76 data FPC: ',
-      'color: white; background-color: #007acc;',
-      data
-    )
   }
 
   return (
     <Card className='chart-container rounded-0'>
       <Card.Header>{column}</Card.Header>
-      <FixedChartFilter
-        excelColumns={excelColumns}
-        data={data}
-        onExcelDataChange={onExcelDataChange}
-      />
       <Card.Body>
         <Container>
+          <FixedChartFilter
+            excelColumns={excelColumns}
+            data={data}
+            onExcelDataChange={onExcelDataChange}
+          />
           <Row>
             <div className='chart-container'>
               <canvas ref={canvasRef} />

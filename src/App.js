@@ -31,6 +31,7 @@ function App() {
   const [filteredExcelData, setFilteredExcelData] = useState([])
   const [labels, setLabels] = useState([])
   const [values, setValues] = useState([])
+  const [fileSelected, setFileSelected] = useState(false)
   const fixedCharts = ['Active Skill#1', 'Role', 'Country', 'Grade']
 
   useEffect(() => {
@@ -149,6 +150,7 @@ function App() {
 
   const handleFileSelect = file => {
     try {
+      setFileSelected(true)
       setSelectedFile(file)
       readExcelFile(file, sheet => {
         const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
@@ -269,7 +271,10 @@ function App() {
           {/* Options + 1 chart */}
           <Col md={4}>
             {/* File Upload */}
-            <FileUpload onFileSelect={handleFileSelect} />
+            <FileUpload
+              onFileSelect={handleFileSelect}
+              fileSelected={fileSelected}
+            />
             {/* Filter Selection Dropdown */}
             {selectedColumn && labels.length > 0 && (
               <Card className='chart-container rounded-0'>

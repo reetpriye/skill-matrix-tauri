@@ -2,7 +2,7 @@
 import React from 'react'
 import { Form, Card } from 'react-bootstrap'
 
-function FileUpload({ onFileSelect }) {
+function FileUpload({ onFileSelect, fileSelected }) {
   const handleFileSelect = e => {
     const file = e.target.files[0]
     onFileSelect(file)
@@ -18,6 +18,7 @@ function FileUpload({ onFileSelect }) {
             size='sm'
             accept='.xlsx'
             onChange={handleFileSelect}
+            disabled={fileSelected}
           />
         </Form.Group>
       </Card.Body>
