@@ -30,8 +30,6 @@ function FilterDropdown({
         const dataType = determineDataType(columnData)
         setColumnDataType(dataType)
 
-        console.log('Data type identified: ', dataType)
-
         // Set the operator options based on data type
         const operatorOptions = getOperatorOptions(dataType)
         setSelectedOperator(operatorOptions[0]) // Set to the first option
@@ -77,7 +75,7 @@ function FilterDropdown({
         value: selectedValue
       })
       setSelectedColumn('')
-      setSelectedOperator('=') // Reset operator to default (=) after adding a filter
+      setSelectedOperator('=')
       setSelectedValue('')
     }
   }

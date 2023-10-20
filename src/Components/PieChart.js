@@ -1,59 +1,59 @@
 // PieChart.js
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
-import { Container, Row } from 'react-bootstrap';
+import React, { useEffect, useRef } from 'react'
+import Chart from 'chart.js/auto'
+import { Container, Row } from 'react-bootstrap'
 
 function PieChart({ data, showLegend }) {
-  const canvasRef = useRef(null);
-  const chartInstanceRef = useRef(null);
+  const canvasRef = useRef(null)
+  const chartInstanceRef = useRef(null)
 
   useEffect(() => {
     if (canvasRef.current) {
       if (chartInstanceRef.current) {
         // Destroy the previous chart instance if it exists
-        chartInstanceRef.current.destroy();
+        chartInstanceRef.current.destroy()
       }
 
-      const ctx = canvasRef.current.getContext('2d');
+      const ctx = canvasRef.current.getContext('2d')
       chartInstanceRef.current = new Chart(ctx, {
         type: 'pie',
         data: {
           labels: data.labels,
           datasets: [
             {
-              data: data.values,
-            },
-          ],
+              data: data.values
+            }
+          ]
         },
         options: {
-          responsive: true, // Make the chart responsive
-          maintainAspectRatio: false, // Maintain the aspect ratio
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: showLegend || false, // Optionally show the legend
-            },
-          },
-        },
-      });
+              display: showLegend || false
+            }
+          }
+        }
+      })
     }
 
     return () => {
       if (chartInstanceRef.current) {
         // Clean up the chart instance when the component unmounts
-        chartInstanceRef.current.destroy();
+        chartInstanceRef.current.destroy()
       }
-    };
-  }, [data, showLegend]);
+    }
+  }, [data, showLegend])
 
   return (
     <Container>
       <Row>
-        <div className="chart-container">
+        <div className='chart-container'>
           <canvas ref={canvasRef} />
         </div>
       </Row>
     </Container>
-  );
+  )
 }
 
-export default PieChart;
+export default PieChart

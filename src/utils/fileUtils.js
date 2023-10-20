@@ -1,13 +1,13 @@
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx'
 
 export function readExcelFile(file, callback) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const data = e.target.result;
-    const workbook = XLSX.read(data, { type: 'array' });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    callback(sheet);
-  };
-  reader.readAsArrayBuffer(file);
+  const reader = new FileReader()
+  reader.onload = e => {
+    const data = e.target.result
+    const workbook = XLSX.read(data, { type: 'array' })
+    const sheetName = workbook.SheetNames[0]
+    const sheet = workbook.Sheets[sheetName]
+    callback(sheet)
+  }
+  reader.readAsArrayBuffer(file)
 }

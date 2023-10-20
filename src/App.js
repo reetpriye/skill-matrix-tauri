@@ -1,33 +1,27 @@
-// App.js
 import React, { useState, useEffect } from 'react'
+import FileSaver from 'file-saver'
 import * as XLSX from 'xlsx'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Row, Col, Card, Button, Navbar } from 'react-bootstrap'
-
-import FileUpload from './Components/FileUpload'
-import ColumnSelection from './Components/ColumnSelection'
-import PieChart from './Components/PieChart'
-import FilterDropdown from './Components/FilterDropdown'
-import FixedChartFilter from './Components/FixedChartFilter'
-import Alert from './Components/Alert'
-import { readExcelFile } from './utils/fileUtils'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
 
 import './App.css'
+import FileUpload from './Components/FileUpload'
+import ColumnSelection from './Components/ColumnSelection'
+import PieChart from './Components/PieChart'
+import FixedPieChart from './Components/FixedPieChart'
+import FilterDropdown from './Components/FilterDropdown'
+import Alert from './Components/Alert'
+import { readExcelFile } from './utils/fileUtils'
 
 library.add(faSun, faMoon)
 
 function App() {
-  // State management
-  // For alerts
   const [alertMessage, setAlertMessage] = useState('')
   const [alertType, setAlertType] = useState('')
   const [showAlert, setShowAlert] = useState(false)
-  // For excel data
   const [selectedFile, setSelectedFile] = useState(null)
   const [selectedColumn, setSelectedColumn] = useState(null)
   const [excelColumns, setExcelColumns] = useState([])
@@ -35,18 +29,8 @@ function App() {
   const [filters, setFilters] = useState([])
   const [originalExcelData, setOriginalExcelData] = useState([])
   const [filteredExcelData, setFilteredExcelData] = useState([])
-  // For charts
-  const [primarySkillData, setPrimarySkillData] = useState({
-    labels: [],
-    values: []
-  })
-  const [roleData, setRoleData] = useState({ labels: [], values: [] })
-  const [countryData, setCountryData] = useState({ labels: [], values: [] })
-  const [gradeData, setGradeData] = useState({ labels: [], values: [] })
-  // For the last chart
   const [labels, setLabels] = useState([])
   const [values, setValues] = useState([])
-
   const fixedCharts = ['Active Skill#1', 'Role', 'Country', 'Grade']
 
   useEffect(() => {
@@ -56,6 +40,21 @@ function App() {
       document.documentElement.classList.remove('dark-theme')
     }
   }, [darkTheme])
+
+  useEffect(() => {
+    console.log(
+      '%cApp.js line:45 excelColumns',
+      'color: white; background-color: #007acc;',
+      excelColumns
+    )
+  }, [excelColumns])
+  useEffect(() => {
+    console.log(
+      '%cApp.js line:45 originalExcelData',
+      'color: white; background-color: #007acc;',
+      originalExcelData
+    )
+  }, [originalExcelData])
 
   // When filters get changed, it calls updateFilteredData() which updates
   // the filteredExcelData that in turn fires handleColumnSelect which
@@ -151,7 +150,6 @@ function App() {
       })
     })
 
-    console.log('filteredData After Exiting the Loop: ', filteredData)
     setFilteredExcelData(filteredData)
   }
 
@@ -172,45 +170,6 @@ function App() {
         setFilteredExcelData(data)
         const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
         setExcelColumns(headers)
-        const columnsToFetch = fixedCharts
-
-        columnsToFetch.forEach(column => {
-          const selectedColumnIndex = headers.findIndex(
-            header => header === column
-          )
-          if (selectedColumnIndex !== -1) {
-            const columnData = XLSX.utils.sheet_to_json(sheet, {
-              header: 1,
-              raw: true,
-              range: 1
-            })
-            const labels = []
-            const values = {}
-
-            columnData.forEach(row => {
-              const value = row[selectedColumnIndex]
-              if (!excelColumns.includes(value)) {
-                if (values[value]) {
-                  values[value]++
-                } else {
-                  values[value] = 1
-                  labels.push(value)
-                }
-              }
-            })
-
-            const valueArray = labels.map(label => values[label])
-            if (column === 'Active Skill#1') {
-              setPrimarySkillData({ labels, values: valueArray })
-            } else if (column === 'Role') {
-              setRoleData({ labels, values: valueArray })
-            } else if (column === 'Country') {
-              setCountryData({ labels, values: valueArray })
-            } else if (column === 'Grade') {
-              setGradeData({ labels, values: valueArray })
-            }
-          }
-        })
       })
     } catch (error) {
       console.error('Error handling file select:', error)
@@ -246,7 +205,6 @@ function App() {
 
   // Export data to XLSX format
   const exportToXLSX = () => {
-    console.log('exportToXLSX filteredExcelData: ', filteredExcelData)
     if (filteredExcelData.length > 0) {
       const ws = XLSX.utils.aoa_to_sheet(filteredExcelData)
       const wb = XLSX.utils.book_new()
@@ -287,58 +245,38 @@ function App() {
             <Container>
               <Row>
                 <Col md={6}>
-                  {primarySkillData && (
-                    <>
-                      <Card className='chart-container rounded-0'>
-                        <Card.Header>{fixedCharts[0]}</Card.Header>
-                        <FixedChartFilter
-                          columns={excelColumns}
-                          selectedColumn={selectedColumn}
-                          labels={labels} // Pass the 'labels' prop here
-                          filters={filters}
-                          onFilterSelect={handleFilterSelect}
-                          onFilterRemove={handleFilterRemove}
-                          data={primarySkillData}
-                          excelColumns={excelColumns}
-                        />
-                        <Card.Body>
-                          <PieChart data={primarySkillData} showLegend={true} />
-                        </Card.Body>
-                      </Card>
-                    </>
-                  )}
+                  <FixedPieChart
+                    column={fixedCharts[0]}
+                    excelData={originalExcelData}
+                    excelColumns={excelColumns}
+                    showLegend={true}
+                  />
                 </Col>
                 <Col md={6}>
-                  {roleData && (
-                    <Card className='chart-container rounded-0'>
-                      <Card.Header>{fixedCharts[1]}</Card.Header>
-                      <Card.Body>
-                        <PieChart data={roleData} showLegend={true} />
-                      </Card.Body>
-                    </Card>
-                  )}
+                  <FixedPieChart
+                    column={fixedCharts[1]}
+                    excelData={originalExcelData}
+                    excelColumns={excelColumns}
+                    showLegend={true}
+                  />
                 </Col>
               </Row>
               <Row>
                 <Col md={6}>
-                  {countryData && (
-                    <Card className='chart-container rounded-0'>
-                      <Card.Header>{fixedCharts[2]}</Card.Header>
-                      <Card.Body>
-                        <PieChart data={countryData} showLegend={true} />
-                      </Card.Body>
-                    </Card>
-                  )}
+                  <FixedPieChart
+                    column={fixedCharts[2]}
+                    excelData={originalExcelData}
+                    excelColumns={excelColumns}
+                    showLegend={true}
+                  />
                 </Col>
                 <Col md={6}>
-                  {gradeData && (
-                    <Card className='chart-container rounded-0'>
-                      <Card.Header>{fixedCharts[3]}</Card.Header>
-                      <Card.Body>
-                        <PieChart data={gradeData} showLegend={true} />
-                      </Card.Body>
-                    </Card>
-                  )}
+                  <FixedPieChart
+                    column={fixedCharts[3]}
+                    excelData={originalExcelData}
+                    excelColumns={excelColumns}
+                    showLegend={true}
+                  />
                 </Col>
               </Row>
             </Container>
@@ -355,7 +293,7 @@ function App() {
                   <FilterDropdown
                     columns={excelColumns}
                     selectedColumn={selectedColumn}
-                    labels={labels} // Pass the 'labels' prop here
+                    labels={labels}
                     filters={filters}
                     onFilterSelect={handleFilterSelect}
                     onFilterRemove={handleFilterRemove}
@@ -391,8 +329,6 @@ function App() {
         {/* Footer Part */}
         <Row>
           <Col>
-            <button onClick={exportToXLSX}>Export to XLSX</button>
-
             <div className='bg-dark text-white d-flex justify-content-between align-items-center'>
               <div className='px-2'>
                 <h6>Made with love from TCS</h6>
@@ -407,6 +343,7 @@ function App() {
                   </div>
                 </Button>
               </div>
+              <button onClick={exportToXLSX}>Export to XLSX</button>
             </div>
           </Col>
         </Row>
