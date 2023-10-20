@@ -41,21 +41,6 @@ function App() {
     }
   }, [darkTheme])
 
-  useEffect(() => {
-    console.log(
-      '%cApp.js line:45 excelColumns',
-      'color: white; background-color: #007acc;',
-      excelColumns
-    )
-  }, [excelColumns])
-  useEffect(() => {
-    console.log(
-      '%cApp.js line:45 originalExcelData',
-      'color: white; background-color: #007acc;',
-      originalExcelData
-    )
-  }, [originalExcelData])
-
   // When filters get changed, it calls updateFilteredData() which updates
   // the filteredExcelData that in turn fires handleColumnSelect which
   // changes labels and values and the pie chart re renders
@@ -113,6 +98,7 @@ function App() {
       return filters.every(filter => {
         const { column, operator, value } = filter
         const columnValue = row[excelColumns.indexOf(column)]
+        console.log('FromApp.js:', columnValue)
 
         if (!excelColumns.includes(columnValue)) {
           // Ensure the columnValue and filterValue are treated as numbers
@@ -219,9 +205,7 @@ function App() {
     <>
       <Container
         fluid
-        className={
-          darkTheme ? 'dark-theme mt-2 main-container' : 'mt-2 main-container'
-        }
+        className={darkTheme ? 'dark-theme main-container' : 'main-container'}
       >
         {/* Header Part */}
         <Row>
@@ -247,7 +231,7 @@ function App() {
                 <Col md={6}>
                   <FixedPieChart
                     column={fixedCharts[0]}
-                    excelData={originalExcelData}
+                    data={originalExcelData}
                     excelColumns={excelColumns}
                     showLegend={true}
                   />
@@ -255,7 +239,7 @@ function App() {
                 <Col md={6}>
                   <FixedPieChart
                     column={fixedCharts[1]}
-                    excelData={originalExcelData}
+                    data={originalExcelData}
                     excelColumns={excelColumns}
                     showLegend={true}
                   />
@@ -265,7 +249,7 @@ function App() {
                 <Col md={6}>
                   <FixedPieChart
                     column={fixedCharts[2]}
-                    excelData={originalExcelData}
+                    data={originalExcelData}
                     excelColumns={excelColumns}
                     showLegend={true}
                   />
@@ -273,7 +257,7 @@ function App() {
                 <Col md={6}>
                   <FixedPieChart
                     column={fixedCharts[3]}
-                    excelData={originalExcelData}
+                    data={originalExcelData}
                     excelColumns={excelColumns}
                     showLegend={true}
                   />
