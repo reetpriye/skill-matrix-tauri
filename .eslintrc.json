@@ -1,0 +1,9 @@
+{
+    "globals": {
+        "FileSaver": "readonly"
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        // Your custom rules, if any
+    }
+}
