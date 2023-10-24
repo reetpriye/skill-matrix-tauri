@@ -4,8 +4,10 @@ import { Form } from 'react-bootstrap'
 
 function ColumnSelection({ columns, onColumnSelect }) {
   return (
-    <Form.Group>
-      <Form.Label>Select a Column:</Form.Label>
+    <Form.Group className='d-flex align-items-center'>
+      <Form.Label className='m-0' style={{ flexBasis: '50%' }}>
+        Select a Column:
+      </Form.Label>
       <Form.Select onChange={e => onColumnSelect(e.target.value)}>
         <option value=''>Choose a Column</option>
         {columns.map(col => (

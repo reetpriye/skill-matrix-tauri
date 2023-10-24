@@ -11,8 +11,13 @@ function FileUpload({ onFileSelect, fileSelected }) {
   return (
     <Card className='chart-container rounded-0'>
       <Card.Body>
-        <Form.Group controlId='formFileSm'>
-          <Form.Label>Select Input File</Form.Label>
+        <Form.Group
+          className='d-flex align-items-center'
+          controlId='formFileSm'
+        >
+          <Form.Label className='m-0' style={{ flexBasis: '50%' }}>
+            Select Input File
+          </Form.Label>
           <Form.Control
             type='file'
             size='sm'

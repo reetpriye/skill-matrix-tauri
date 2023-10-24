@@ -191,16 +191,33 @@ function App() {
     }
   }
 
-  // Export data to XLSX format
   const exportToXLSX = () => {
     if (filteredExcelData.length > 0) {
       const ws = XLSX.utils.aoa_to_sheet(filteredExcelData)
       const wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(wb, ws, 'Filtered Data')
-      const xlsxFile = XLSX.write(wb, { bookType: 'xlsx', type: 'blob' })
 
-      FileSaver.saveAs(xlsxFile, 'filtered_data.xlsx')
+      // Convert the XLSX workbook to a binary string
+      const xlsxBinaryString = XLSX.write(wb, {
+        bookType: 'xlsx',
+        type: 'binary'
+      })
+
+      // Convert the binary string to a Blob
+      const blob = new Blob([s2ab(xlsxBinaryString)], {
+        type: 'application/octet-stream'
+      })
+
+      // Save the Blob as a file
+      FileSaver.saveAs(blob, 'filtered_data.xlsx')
     }
+  }
+
+  function s2ab(s) {
+    const buf = new ArrayBuffer(s.length)
+    const view = new Uint8Array(buf)
+    for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
+    return buf
   }
 
   return (
