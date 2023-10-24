@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import FileSaver from 'file-saver'
+import * as XLSX from 'xlsx'
 import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -82,6 +84,35 @@ function FilterDropdown({
 
   const handleRemoveFilter = index => {
     onFilterRemove(index)
+  }
+
+  const exportToXLSX = () => {
+    if (data.length > 0) {
+      const ws = XLSX.utils.aoa_to_sheet(data)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, 'Filtered Data')
+
+      // Convert the XLSX workbook to a binary string
+      const xlsxBinaryString = XLSX.write(wb, {
+        bookType: 'xlsx',
+        type: 'binary'
+      })
+
+      // Convert the binary string to a Blob
+      const blob = new Blob([s2ab(xlsxBinaryString)], {
+        type: 'application/octet-stream'
+      })
+
+      // Save the Blob as a file
+      FileSaver.saveAs(blob, 'filtered_data.xlsx')
+    }
+  }
+
+  function s2ab(s) {
+    const buf = new ArrayBuffer(s.length)
+    const view = new Uint8Array(buf)
+    for (let i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
+    return buf
   }
 
   return (
@@ -183,6 +214,11 @@ function FilterDropdown({
             </div>
           ))}
         </Form.Group>
+        <div className='mt-2 d-flex flex-row-reverse'>
+          <Button className='btn-sm' onClick={exportToXLSX}>
+            Export filtered data
+          </Button>
+        </div>
       </div>
     </Form.Group>
   )
