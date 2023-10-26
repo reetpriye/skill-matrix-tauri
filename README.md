@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# Skills Matrix Project README
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the Skills Matrix project built using React and Tauri. This project combines the power of React for building user interfaces with Tauri to create native desktop applications. Below are instructions on how to use and develop for this project.
+
+## Prerequisites
+
+Before you begin, make sure you have the following software installed on your machine:
+
+- [Node.js](https://nodejs.org/)
+- [Yarn](https://yarnpkg.com/)
+- [Rust](https://www.rust-lang.org/) (Tauri requires Rust for building the native components)
+- [Tauri CLI](https://tauri.studio/docs/getting-started/intro) (Install with `npm install -g tauri`)
+
+## Installation
+
+1. Clone this repository to your local machine:
+
+   ```bash
+   git clone https://github.com/reetpriye/skills-matrix-tauri.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+    cd skills-matrix-tauri
+   ```
+
+3. Install the project dependencies using Yarn:
+
+   ```bash
+   yarn install
+   ```
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run the following scripts:
 
-### `npm start`
+`1. yarn run tauri build`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Builds the Tauri application into an executable for your platform (e.g., .exe, .app, or .dmg).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+    yarn run tauri build
+```
 
-### `npm test`
+This command will generate the executable in the ./target/release/ directory.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`2. yarn run dev`
 
-### `npm run build`
+```bash
+    yarn run dev
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Runs the app in development mode. This command starts the Tauri application in development mode, and the React app in a development server. Any changes you make to the React code will automatically be reflected in the Tauri application.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`3. yarn run start`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Runs the app in development mode. This command starts the React app in a development server. Any changes you make to the React code will automatically be reflected in the react application.
 
-### `npm run eject`
+```bash
+    yarn run start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Starts the React development server on localhost:3000. This command is useful for standalone React development if you don't need the Tauri components.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Development Workflow
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Use `yarn run dev` to run the Tauri development server and work on your UI.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. As you make changes to your React code, the Tauri application should automatically reflect those changes.
+
+3. When you're ready to distribute your application, use `yarn run tauri build` to create an executable for your platform.
+
+## Configuration
+
+You can find Tauri and React configurations in the tauri.conf.js and src directory, respectively. Customize these configurations to suit your project's needs.
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+For more information on Tauri, visit the [Tauri documentation](https://tauri.studio/docs/).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+For more information on React, visit the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Happy coding!

@@ -31,6 +31,7 @@ const App = () => {
   const [labels, setLabels] = useState([])
   const [values, setValues] = useState([])
   const [fileSelected, setFileSelected] = useState(false)
+  // Code can break if these columns are not found: will work on it later
   const fixedCharts = ['Active Skill#1', 'Role', 'Country', 'Grade']
 
   useEffect(() => {
