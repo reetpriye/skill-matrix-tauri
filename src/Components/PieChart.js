@@ -1,9 +1,11 @@
-// PieChart.js
 import React, { useEffect, useRef } from 'react'
 import Chart from 'chart.js/auto'
 import { Container, Row } from 'react-bootstrap'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
-function PieChart({ data, showLegend }) {
+Chart.register(ChartDataLabels)
+
+const PieChart = ({ legendColor, data, showLegend }) => {
   const canvasRef = useRef(null)
   const chartInstanceRef = useRef(null)
 
@@ -30,7 +32,37 @@ function PieChart({ data, showLegend }) {
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: showLegend || false
+              display: showLegend || false,
+              labels: {
+                color: legendColor
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const value = context.parsed || 0
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0)
+                  const percentage = ((value / total) * 100).toFixed(2) + '%'
+                  return `Count: ${value} (${percentage})`
+                }
+              }
+            },
+            datalabels: {
+              formatter: (value, context) => {
+                const total = context.chart.data.datasets[0].data.reduce(
+                  (a, b) => a + b,
+                  0
+                )
+                if (context.chart.data.labels.length <= 10) {
+                  const percentage = ((value / total) * 100).toFixed(0) + '%'
+                  return `${percentage}`
+                } else {
+                  return ``
+                }
+              },
+              color: '#fff',
+              align: 'center',
+              offset: 0
             }
           }
         }

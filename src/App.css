@@ -28,18 +28,6 @@
 }
 
 /* Additional Dark Theme Styles Ends Here */
-/* #theme-toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 999;
-} */
-
-.test-div {
-  width: '200px' !important;
-  height: '200px' !important;
-  background-color: red !important;
-}
 
 .body-container {
   min-height: calc(100vh - 300px);
@@ -48,4 +36,40 @@
 .select-dropdown {
   height: 40px;
   font-size: 14px;
+}
+
+/* Styles for custom alert */
+.custom-alert {
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  /* Higher z-index to show on top */
+  color: white;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: black;
+  font-size: 14px;
+  /* Decrease the font size */
+}
+
+.custom-alert span {
+  margin-right: 5px;
+}
+
+.custom-alert .message {
+  font-weight: bold;
+}
+
+/* Styles for specific message types */
+.custom-alert.warning-message {
+  background-color: #ff6666;
+}
+
+.custom-alert.success-message {
+  background-color: #66ff66;
 }

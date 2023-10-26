@@ -1,8 +1,7 @@
-// FileUpload.js
 import React from 'react'
 import { Form, Card } from 'react-bootstrap'
 
-function FileUpload({ onFileSelect, fileSelected }) {
+const FileUpload = ({ onFileSelect, fileSelected }) => {
   const handleFileSelect = e => {
     const file = e.target.files[0]
     onFileSelect(file)
@@ -19,6 +18,7 @@ function FileUpload({ onFileSelect, fileSelected }) {
             Select Input File
           </Form.Label>
           <Form.Control
+            style={{ flexBasis: '50%' }}
             type='file'
             size='sm'
             accept='.xlsx'

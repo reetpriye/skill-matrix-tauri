@@ -5,14 +5,14 @@ import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
-function FilterDropdown({
+const FilterDropdown = ({
   columns,
   onFilterSelect,
   filters,
   onFilterRemove,
   data,
   excelColumns
-}) {
+}) => {
   const [selectedColumn, setSelectedColumn] = useState('')
   const [selectedOperator, setSelectedOperator] = useState('=')
   const [selectedValue, setSelectedValue] = useState('')

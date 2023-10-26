@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
 
-export function readExcelFile(file, callback) {
+export const readExcelFile = (file, callback) => {
   const reader = new FileReader()
   reader.onload = e => {
     const data = e.target.result

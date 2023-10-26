@@ -12,12 +12,12 @@ import ColumnSelection from './Components/ColumnSelection'
 import PieChart from './Components/PieChart'
 import FixedPieChart from './Components/FixedPieChart'
 import FilterDropdown from './Components/FilterDropdown'
-import Alert from './Components/Alert'
+import CustomAlert from './Components/CustomAlert'
 import { readExcelFile } from './utils/fileUtils'
 
 library.add(faSun, faMoon)
 
-function App() {
+const App = () => {
   const [alertMessage, setAlertMessage] = useState('')
   const [alertType, setAlertType] = useState('')
   const [showAlert, setShowAlert] = useState(false)
@@ -219,6 +219,7 @@ function App() {
               <Row>
                 <Col md={6}>
                   <FixedPieChart
+                    legendColor={darkTheme ? '#fff' : '#000'}
                     column={fixedCharts[0]}
                     data={originalExcelData}
                     excelColumns={excelColumns}
@@ -227,6 +228,7 @@ function App() {
                 </Col>
                 <Col md={6}>
                   <FixedPieChart
+                    legendColor={darkTheme ? '#fff' : '#000'}
                     column={fixedCharts[1]}
                     data={originalExcelData}
                     excelColumns={excelColumns}
@@ -237,6 +239,7 @@ function App() {
               <Row>
                 <Col md={6}>
                   <FixedPieChart
+                    legendColor={darkTheme ? '#fff' : '#000'}
                     column={fixedCharts[2]}
                     data={originalExcelData}
                     excelColumns={excelColumns}
@@ -245,6 +248,7 @@ function App() {
                 </Col>
                 <Col md={6}>
                   <FixedPieChart
+                    legendColor={darkTheme ? '#fff' : '#000'}
                     column={fixedCharts[3]}
                     data={originalExcelData}
                     excelColumns={excelColumns}
@@ -295,7 +299,11 @@ function App() {
               <Card className='chart-container rounded-0'>
                 <Card.Header>{selectedColumn}</Card.Header>
                 <Card.Body>
-                  <PieChart data={{ labels, values }} showLegend={true} />
+                  <PieChart
+                    legendColor={darkTheme ? '#fff' : '#000'}
+                    data={{ labels, values }}
+                    showLegend={true}
+                  />
                 </Card.Body>
               </Card>
             )}
@@ -304,13 +312,13 @@ function App() {
 
         {/* Footer Part */}
         <Row>
-          <Col>
-            <div className='bg-dark text-white d-flex justify-content-between align-items-center'>
-              <div className='px-2'>
-                <h6>Made with love from TCS</h6>
-              </div>
+          <Col style={{ padding: 0, marginTop: '20px' }}>
+            <div className='bg-dark text-white d-flex flex-row-reverse'>
               <div onClick={toggleDarkTheme}>
-                <Button variant={darkTheme ? 'light' : 'dark'}>
+                <Button
+                  className='rounded-0'
+                  variant={darkTheme ? 'light' : 'dark'}
+                >
                   <div className='d-flex justify-content-between align-items-center'>
                     <p className='m-0'>Toggle theme</p>
                     <div className='px-2'>
@@ -324,7 +332,11 @@ function App() {
         </Row>
 
         {showAlert && (
-          <Alert message={alertMessage} type={alertType} onClose={closeAlert} />
+          <CustomAlert
+            message={alertMessage}
+            type={alertType}
+            onClose={closeAlert}
+          />
         )}
       </Container>
     </>
