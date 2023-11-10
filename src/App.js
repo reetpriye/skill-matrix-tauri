@@ -31,8 +31,7 @@ const App = () => {
   const [labels, setLabels] = useState([])
   const [values, setValues] = useState([])
   const [fileSelected, setFileSelected] = useState(false)
-  // Code can break if these columns are not found: will work on it later
-  const fixedCharts = ['Active Skill#1', 'Role', 'Country', 'Grade']
+  const [fixedChartPositions, setFixedChartPositions] = useState([3, 4, 5, 6])
 
   useEffect(() => {
     if (darkTheme) {
@@ -53,6 +52,16 @@ const App = () => {
   useEffect(() => {
     handleColumnSelect(selectedColumn)
   }, [filteredExcelData])
+
+  const fixedCharts = fixedChartPositions.map(
+    position => excelColumns[position - 1]
+  )
+
+  const handleDropdownChange = (index, value) => {
+    const updatedPositions = [...fixedChartPositions]
+    updatedPositions[index] = parseInt(value)
+    setFixedChartPositions(updatedPositions)
+  }
 
   const handleFilterRemove = index => {
     const updatedFilters = [...filters]
@@ -313,20 +322,46 @@ const App = () => {
 
         {/* Footer Part */}
         <Row>
-          <Col style={{ padding: 0, marginTop: '20px' }}>
-            <div className='bg-dark text-white d-flex flex-row-reverse'>
-              <div onClick={toggleDarkTheme}>
-                <Button
-                  className='rounded-0'
-                  variant={darkTheme ? 'light' : 'dark'}
-                >
-                  <div className='d-flex justify-content-between align-items-center'>
-                    <p className='m-0'>Toggle theme</p>
-                    <div className='px-2'>
-                      <FontAwesomeIcon icon={darkTheme ? 'sun' : 'moon'} />
-                    </div>
+          <Col className='p-0 mt-4'>
+            <div className='bg-dark text-white d-flex justify-content-between px-2'>
+              <Button
+                onClick={toggleDarkTheme}
+                style={{ height: '2.5rem' }}
+                className='rounded-0 border-0'
+                variant={darkTheme ? 'light' : 'dark'}
+              >
+                <div className='d-flex justify-content-between align-items-center'>
+                  <p className='m-0' style={{ fontSize: '0.9rem' }}>
+                    Toggle theme
+                  </p>
+                  <div className='px-2'>
+                    <FontAwesomeIcon icon={darkTheme ? 'sun' : 'moon'} />
                   </div>
-                </Button>
+                </div>
+              </Button>
+              <div className='d-flex align-items-center'>
+                <div className='mx-2'>
+                  <p style={{ fontSize: '0.9rem' }}>
+                    Change fixed chart columns:{' '}
+                  </p>
+                </div>
+                {fixedChartPositions.map((position, index) => (
+                  <div key={index} className='mx-1'>
+                    <select
+                      className='form-control bg-dark text-white rounded-0 small-select'
+                      value={position}
+                      onChange={e =>
+                        handleDropdownChange(index, e.target.value)
+                      }
+                    >
+                      {excelColumns.map((column, idx) => (
+                        <option key={idx} value={idx + 1}>
+                          {idx + 1}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
               </div>
             </div>
           </Col>

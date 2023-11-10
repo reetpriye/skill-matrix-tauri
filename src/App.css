@@ -73,3 +73,12 @@
 .custom-alert.success-message {
   background-color: #66ff66;
 }
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.small-select {
+  font-size: 12px;
+}
