@@ -270,7 +270,7 @@ const App = () => {
           >
             <div>
               <Navbar.Brand>
-                Skills Matrix for Digital Thread Associates
+                Skill Matrix for Digital Thread Associates
               </Navbar.Brand>
             </div>
           </Navbar>

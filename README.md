@@ -1,6 +1,6 @@
-# Skills Matrix Project README
+# Skill Matrix Project README
 
-Welcome to the Skills Matrix project built using React and Tauri. This project combines the power of React for building user interfaces with Tauri to create native desktop applications. Below are instructions on how to use and develop for this project.
+Welcome to the Skill Matrix project built using React and Tauri. This project combines the power of React for building user interfaces with Tauri to create native desktop applications. Below are instructions on how to use and develop for this project.
 
 ## Prerequisites
 
@@ -16,13 +16,13 @@ Before you begin, make sure you have the following software installed on your ma
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/reetpriye/skills-matrix-tauri.git
+   git clone https://github.com/reetpriye/skill-matrix-tauri.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-    cd skills-matrix-tauri
+    cd skill-matrix-tauri
    ```
 
 3. Install the project dependencies using Yarn:
