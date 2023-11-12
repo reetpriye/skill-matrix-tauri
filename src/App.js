@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { invoke } from '@tauri-apps/api/tauri'
 import * as XLSX from 'xlsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Container, Row, Col, Card, Button, Navbar } from 'react-bootstrap'
@@ -13,7 +14,6 @@ import PieChart from './Components/PieChart'
 import FixedPieChart from './Components/FixedPieChart'
 import FilterDropdown from './Components/FilterDropdown'
 import CustomAlert from './Components/CustomAlert'
-import { readExcelFile } from './utils/fileUtils'
 
 library.add(faSun, faMoon)
 
@@ -30,8 +30,13 @@ const App = () => {
   const [filteredExcelData, setFilteredExcelData] = useState([])
   const [labels, setLabels] = useState([])
   const [values, setValues] = useState([])
-  const [fileSelected, setFileSelected] = useState(false)
+  const [isFileSelected, setIsFileSelected] = useState(false)
+  const [isFileFound, setIsFileFound] = useState(false)
   const [fixedChartPositions, setFixedChartPositions] = useState([3, 4, 5, 6])
+
+  useEffect(() => {
+    findExcelFromFixedLocation()
+  }, [])
 
   useEffect(() => {
     if (darkTheme) {
@@ -52,6 +57,24 @@ const App = () => {
   useEffect(() => {
     handleColumnSelect(selectedColumn)
   }, [filteredExcelData])
+
+  const resetAppState = () => {
+    setAlertMessage('')
+    setAlertType('')
+    setShowAlert(false)
+    setSelectedFile(null)
+    setSelectedColumn(null)
+    setExcelColumns([])
+    setDarkTheme(false)
+    setFilters([])
+    setOriginalExcelData([])
+    setFilteredExcelData([])
+    setLabels([])
+    setValues([])
+    setIsFileSelected(false)
+    setIsFileFound(false)
+    setFixedChartPositions([3, 4, 5, 6])
+  }
 
   const fixedCharts = fixedChartPositions.map(
     position => excelColumns[position - 1]
@@ -157,17 +180,49 @@ const App = () => {
     setShowAlert(false)
   }
 
+  const findExcelFromFixedLocation = async () => {
+    if (isFileFound) return
+    const filePath = 'C:/SkillMatrix/SkillMatrixDT.xlsx'
+    const fileExists = await invoke('file_exists', { path: filePath })
+    if (fileExists) {
+      setIsFileFound(true)
+      const readFileResponse = await invoke('read_excel_file', {
+        path: filePath
+      })
+      setSelectedFile(readFileResponse)
+      const workbook = XLSX.read(readFileResponse, { type: 'array' })
+      const sheetName = workbook.SheetNames[0]
+      const sheet = workbook.Sheets[sheetName]
+      const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
+      setOriginalExcelData(data)
+      setFilteredExcelData(data)
+      const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
+      setExcelColumns(headers)
+      showAlertMessage(`Data loaded from ${filePath}`, 'success')
+    }
+  }
+
   const handleFileSelect = file => {
     try {
-      setFileSelected(true)
-      setSelectedFile(file)
-      readExcelFile(file, sheet => {
-        const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
-        setOriginalExcelData(data)
-        setFilteredExcelData(data)
-        const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
-        setExcelColumns(headers)
-      })
+      resetAppState()
+      if (file) {
+        setIsFileSelected(true)
+        setSelectedFile(file)
+
+        const reader = new FileReader()
+        reader.onload = e => {
+          const eTargetData = e.target.result
+          const workbook = XLSX.read(eTargetData, { type: 'array' })
+          const sheetName = workbook.SheetNames[0]
+          const sheet = workbook.Sheets[sheetName]
+          const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
+          setOriginalExcelData(data)
+          setFilteredExcelData(data)
+          const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
+          setExcelColumns(headers)
+        }
+        reader.readAsArrayBuffer(file)
+      }
     } catch (error) {
       console.error('Error handling file select:', error)
     }
@@ -274,7 +329,8 @@ const App = () => {
             {/* File Upload */}
             <FileUpload
               onFileSelect={handleFileSelect}
-              fileSelected={fileSelected}
+              isFileSelected={isFileSelected}
+              isFileFound={isFileFound}
             />
             {/* Filter Selection Dropdown */}
             {selectedColumn && labels.length > 0 && (

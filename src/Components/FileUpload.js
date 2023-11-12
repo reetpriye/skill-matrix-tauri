@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, Card } from 'react-bootstrap'
 
-const FileUpload = ({ onFileSelect, fileSelected }) => {
+const FileUpload = ({ onFileSelect, isFileSelected, isFileFound }) => {
   const handleFileSelect = e => {
     const file = e.target.files[0]
     onFileSelect(file)
@@ -15,7 +15,7 @@ const FileUpload = ({ onFileSelect, fileSelected }) => {
           controlId='formFileSm'
         >
           <Form.Label className='m-0' style={{ flexBasis: '50%' }}>
-            Select Input File
+            {isFileFound ? 'Change Input File' : 'Select Input File1'}
           </Form.Label>
           <Form.Control
             style={{ flexBasis: '50%' }}
@@ -23,7 +23,7 @@ const FileUpload = ({ onFileSelect, fileSelected }) => {
             size='sm'
             accept='.xlsx'
             onChange={handleFileSelect}
-            disabled={fileSelected}
+            disabled={isFileSelected}
           />
         </Form.Group>
       </Card.Body>

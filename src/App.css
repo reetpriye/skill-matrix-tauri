@@ -41,7 +41,7 @@
 /* Styles for custom alert */
 .custom-alert {
   position: fixed;
-  top: 30px;
+  top: 50px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
@@ -52,7 +52,7 @@
   align-items: center;
   border-radius: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  background-color: black;
+  background-color: rgb(55, 55, 55);
   font-size: 14px;
   /* Decrease the font size */
 }
