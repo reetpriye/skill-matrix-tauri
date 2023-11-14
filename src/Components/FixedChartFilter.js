@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Form } from 'react-bootstrap'
 
-const FixedChartFilter = ({ data, excelColumns, onExcelDataChange }) => {
+const FixedChartFilter = ({ data, excelColumns, onFilteredDataChange }) => {
   const [selectedColumn, setSelectedColumn] = useState('')
   const [selectedOperator, setSelectedOperator] = useState('=')
   const [selectedValue, setSelectedValue] = useState('')
   const [distinctValues, setDistinctValues] = useState([])
   const [columnDataType, setColumnDataType] = useState(null)
-  const [excelData, setExcelData] = useState([])
-  const [filterApplied, setFilterApplied] = useState(false)
+  const [filteredData, setFilteredData] = useState([])
 
   useEffect(() => {
-    onExcelDataChange(excelData)
-  }, [excelData])
+    onFilteredDataChange(filteredData)
+  }, [filteredData])
 
   const handleColumnChange = e => {
     const selectedColumn = e.target.value
@@ -66,7 +65,6 @@ const FixedChartFilter = ({ data, excelColumns, onExcelDataChange }) => {
 
   const handleAddFilter = () => {
     if (data && selectedColumn && selectedOperator && selectedValue) {
-      setFilterApplied(true)
       const filteredData = data.filter(row => {
         const columnValue = row[excelColumns.indexOf(selectedColumn)]
 
@@ -92,8 +90,14 @@ const FixedChartFilter = ({ data, excelColumns, onExcelDataChange }) => {
             }
           } else {
             // Handle non-numeric values here (e.g., strings)
-            const lowercasedColumnValue = columnValue.toLowerCase()
-            const lowercasedFilterValue = selectedValue.toLowerCase()
+            const lowercasedColumnValue =
+              typeof columnValue === 'string'
+                ? columnValue.toLowerCase()
+                : columnValue
+            const lowercasedFilterValue =
+              typeof selectedValue === 'string'
+                ? selectedValue.toLowerCase()
+                : selectedValue
             switch (selectedOperator) {
               case '=':
                 return lowercasedColumnValue === lowercasedFilterValue
@@ -104,12 +108,7 @@ const FixedChartFilter = ({ data, excelColumns, onExcelDataChange }) => {
         }
         return true
       })
-      console.log(
-        '%cFixedChartFilter.js line:107 filteredData',
-        'color: white; background-color: #007acc;',
-        filteredData
-      )
-      setExcelData(filteredData)
+      setFilteredData(filteredData)
     }
   }
 
@@ -121,7 +120,6 @@ const FixedChartFilter = ({ data, excelColumns, onExcelDataChange }) => {
           style={{ flexBasis: '50%' }}
           onChange={handleColumnChange}
           value={selectedColumn}
-          disabled={filterApplied}
         >
           <option value=''>Choose a Column</option>
           {excelColumns &&
@@ -136,7 +134,6 @@ const FixedChartFilter = ({ data, excelColumns, onExcelDataChange }) => {
           style={{ flexBasis: '20%' }}
           onChange={handleOperatorChange}
           value={selectedOperator}
-          disabled={filterApplied}
         >
           {getOperatorOptions(columnDataType).map(operator => (
             <option key={operator} value={operator}>
@@ -149,7 +146,6 @@ const FixedChartFilter = ({ data, excelColumns, onExcelDataChange }) => {
           style={{ flexBasis: '30%' }}
           onChange={handleValueChange}
           value={selectedValue}
-          disabled={filterApplied}
         >
           <option value=''>Choose a Value</option>
           {distinctValues.map(value => (

@@ -155,8 +155,12 @@ const App = () => {
             }
           } else {
             // Handle non-numeric values here (e.g., strings)
-            const lowercasedColumnValue = columnValue.toLowerCase()
-            const lowercasedFilterValue = value.toLowerCase()
+            const lowercasedColumnValue =
+              typeof columnValue === 'string'
+                ? columnValue.toLowerCase()
+                : columnValue
+            const lowercasedFilterValue =
+              typeof value === 'string' ? value.toLowerCase() : value
             switch (operator) {
               case '=':
                 return lowercasedColumnValue === lowercasedFilterValue
@@ -199,6 +203,8 @@ const App = () => {
       const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
       setExcelColumns(headers)
       showAlertMessage(`Data loaded from ${filePath}`, 'success')
+    } else {
+      showAlertMessage(`File not found at ${filePath}`, 'error')
     }
   }
 

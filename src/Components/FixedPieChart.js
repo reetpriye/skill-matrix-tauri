@@ -9,22 +9,22 @@ Chart.register(ChartDataLabels)
 const FixedPieChart = memo(
   ({ legendColor, data, excelColumns, showLegend, column }) => {
     const [chartData, setChartData] = useState({ labels: [], values: [] })
-    const [excelData, setExcelData] = useState([])
+    const [filteredData, setFilteredData] = useState([])
     const canvasRef = useRef(null)
     const chartInstanceRef = useRef(null)
 
     useEffect(() => {
-      setExcelData(data)
+      setFilteredData(data)
     }, [data])
 
     useEffect(() => {
-      if (excelData && excelColumns && excelColumns.length > 0) {
+      if (filteredData && excelColumns && excelColumns.length > 0) {
         try {
           const selectedColumnIndex = excelColumns.findIndex(
             header => header === column
           )
           if (selectedColumnIndex !== -1) {
-            const columnData = excelData
+            const columnData = filteredData
               .map(row => row[selectedColumnIndex])
               .filter(value => !excelColumns.includes(value))
             const uniqueValues = [...new Set(columnData)]
@@ -38,7 +38,7 @@ const FixedPieChart = memo(
           console.error('The column name differs:', error)
         }
       }
-    }, [excelData, excelColumns, column, legendColor])
+    }, [filteredData, excelColumns, column, legendColor])
 
     useEffect(() => {
       if (canvasRef.current) {
@@ -113,8 +113,8 @@ const FixedPieChart = memo(
       }
     }, [chartData, showLegend])
 
-    const onExcelDataChange = data => {
-      setExcelData(data)
+    const onFilteredDataChange = data => {
+      setFilteredData(data)
     }
 
     return (
@@ -125,7 +125,7 @@ const FixedPieChart = memo(
             <FixedChartFilter
               excelColumns={excelColumns}
               data={data}
-              onExcelDataChange={onExcelDataChange}
+              onFilteredDataChange={onFilteredDataChange}
             />
             <Row>
               <div className='chart-container'>
