@@ -111,7 +111,7 @@ const App = () => {
     ) {
       showAlertMessage(
         `Filter for column '${column}' is already applied.`,
-        'warning'
+        'danger'
       )
       return
     }
@@ -131,7 +131,6 @@ const App = () => {
       return filters.every(filter => {
         const { column, operator, value } = filter
         const columnValue = row[excelColumns.indexOf(column)]
-        console.log('FromApp.js:', columnValue)
 
         if (!excelColumns.includes(columnValue)) {
           // Ensure the columnValue and filterValue are treated as numbers
@@ -187,24 +186,27 @@ const App = () => {
   const findExcelFromFixedLocation = async () => {
     if (isFileFound) return
     const filePath = 'C:/SkillMatrix/SkillMatrixDT.xlsx'
-    const fileExists = await invoke('file_exists', { path: filePath })
-    if (fileExists) {
-      setIsFileFound(true)
-      const readFileResponse = await invoke('read_excel_file', {
-        path: filePath
-      })
-      setSelectedFile(readFileResponse)
-      const workbook = XLSX.read(readFileResponse, { type: 'array' })
-      const sheetName = workbook.SheetNames[0]
-      const sheet = workbook.Sheets[sheetName]
-      const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
-      setOriginalExcelData(data)
-      setFilteredExcelData(data)
-      const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
-      setExcelColumns(headers)
-      showAlertMessage(`Data loaded from ${filePath}`, 'success')
-    } else {
-      showAlertMessage(`File not found at ${filePath}`, 'error')
+    try {
+      const fileExists = await invoke('file_exists', { path: filePath })
+      if (fileExists) {
+        setIsFileFound(true)
+        const readFileResponse = await invoke('read_excel_file', {
+          path: filePath
+        })
+        setSelectedFile(readFileResponse)
+        const workbook = XLSX.read(readFileResponse, { type: 'array' })
+        const sheetName = workbook.SheetNames[0]
+        const sheet = workbook.Sheets[sheetName]
+        const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
+        setOriginalExcelData(data)
+        setFilteredExcelData(data)
+        const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
+        setExcelColumns(headers)
+        showAlertMessage(`Data loaded from ${filePath}`, 'success')
+      }
+    } catch (err) {
+      console.log(err)
+      showAlertMessage(`File not found at ${filePath}`, 'danger')
     }
   }
 
@@ -432,7 +434,7 @@ const App = () => {
         {showAlert && (
           <CustomAlert
             message={alertMessage}
-            type={alertType}
+            variant={alertType}
             onClose={closeAlert}
           />
         )}

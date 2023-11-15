@@ -1,19 +1,12 @@
 import React from 'react'
 import Alert from 'react-bootstrap/Alert'
 
-const CustomAlert = ({ message, type }) => {
-  let variant = 'info'
-  if (type === 'warning') {
-    variant = 'warning'
-  } else if (type === 'success') {
-    variant = 'success'
-  }
-
+const CustomAlert = ({ message, variant }) => {
   return (
     <Alert variant={variant} className='custom-alert'>
-      {type === 'warning' && '⚠️'}
-      {type === 'success' && '✅'}
-      {type === 'info' && 'ℹ️'}
+      {variant === 'danger' && '⚠️'}
+      {variant === 'success' && '✅'}
+      {variant === 'info' && 'ℹ️'}
       <span className='message'>{message}</span>
     </Alert>
   )

@@ -38,14 +38,27 @@
   font-size: 14px;
 }
 
+.custom-alert {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
 /* Styles for custom alert */
+/* 
 .custom-alert {
   position: fixed;
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
-  /* Higher z-index to show on top */
   color: white;
   padding: 10px;
   display: flex;
@@ -54,7 +67,6 @@
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   background-color: rgb(55, 55, 55);
   font-size: 14px;
-  /* Decrease the font size */
 }
 
 .custom-alert span {
@@ -65,14 +77,13 @@
   font-weight: bold;
 }
 
-/* Styles for specific message types */
 .custom-alert.warning-message {
   background-color: #ff6666;
 }
 
 .custom-alert.success-message {
   background-color: #66ff66;
-}
+} */
 
 p {
   margin: 0;
