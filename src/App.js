@@ -186,26 +186,23 @@ const App = () => {
   const findExcelFromFixedLocation = async () => {
     if (isFileFound) return
     const filePath = 'C:/SkillMatrix/SkillMatrixDT.xlsx'
-    try {
-      const fileExists = await invoke('file_exists', { path: filePath })
-      if (fileExists) {
-        setIsFileFound(true)
-        const readFileResponse = await invoke('read_excel_file', {
-          path: filePath
-        })
-        setSelectedFile(readFileResponse)
-        const workbook = XLSX.read(readFileResponse, { type: 'array' })
-        const sheetName = workbook.SheetNames[0]
-        const sheet = workbook.Sheets[sheetName]
-        const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
-        setOriginalExcelData(data)
-        setFilteredExcelData(data)
-        const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
-        setExcelColumns(headers)
-        showAlertMessage(`Data loaded from ${filePath}`, 'success')
-      }
-    } catch (err) {
-      console.log(err)
+    const fileExists = await invoke('file_exists', { path: filePath })
+    if (fileExists) {
+      setIsFileFound(true)
+      const readFileResponse = await invoke('read_excel_file', {
+        path: filePath
+      })
+      setSelectedFile(readFileResponse)
+      const workbook = XLSX.read(readFileResponse, { type: 'array' })
+      const sheetName = workbook.SheetNames[0]
+      const sheet = workbook.Sheets[sheetName]
+      const data = XLSX.utils.sheet_to_json(sheet, { header: 1 })
+      setOriginalExcelData(data)
+      setFilteredExcelData(data)
+      const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0]
+      setExcelColumns(headers)
+      showAlertMessage(`Data loaded from ${filePath}`, 'success')
+    } else {
       showAlertMessage(`File not found at ${filePath}`, 'danger')
     }
   }

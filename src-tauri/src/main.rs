@@ -16,7 +16,7 @@ fn file_exists(state: State<'_, AppState>, path: String) -> Result<bool, String>
     // Check if the file at the specified path exists
     match fs::metadata(&path) {
         Ok(_) => Ok(true), // File exists
-        Err(_) => Err(format!("File not found at {}", path)),
+        Err(_) => Ok(false),
     }
 }
 
