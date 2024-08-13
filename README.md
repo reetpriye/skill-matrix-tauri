@@ -1,3 +1,5 @@
+![Screenshot](./assets/screenshot.png)
+
 # Skill Matrix Project README
 
 Welcome to the Skill Matrix project built using React and Tauri. This project combines the power of React for building user interfaces with Tauri to create native desktop applications. Below are instructions on how to use and develop for this project.
